@@ -9,4 +9,4 @@
 	url = https://github.com/gnsps/solidity-bytes-utils
 [submodule "packages/foundry/lib/CMTAT"]
 	path = packages/foundry/lib/CMTAT
-	url = git@github.com:pishty1/CMTAT.git
+	url = https://github.com/pishty1/CMTAT
