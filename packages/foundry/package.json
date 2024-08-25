@@ -1,6 +1,6 @@
 {
-  "name": "@se-2/foundry",
-  "version": "0.0.1",
+  "name": "@tmarket/foundry",
+  "version": "0.1",
   "scripts": {
     "account": "node script/ListAccount.js",
     "chain": "anvil --config-out localhost.json",

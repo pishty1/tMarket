@@ -148,8 +148,14 @@ contract TmarketTest is Test {
         vm.stopPrank();
 
         // assert the rights token is transferred
-        assertEq(rightsToken.balanceOf(jane), janeInitRightsBalance + rightsToSell);
-        assertEq(rightsToken.balanceOf(john), johnInitRightsBalance - rightsToSell);
+        assertEq(
+            rightsToken.balanceOf(jane),
+            janeInitRightsBalance + rightsToSell
+        );
+        assertEq(
+            rightsToken.balanceOf(john),
+            johnInitRightsBalance - rightsToSell
+        );
 
         // assert the usdc is transferred
         assertEq(usdc.balanceOf(jane), janeInitUSDcBalance - totalinUsdc);
