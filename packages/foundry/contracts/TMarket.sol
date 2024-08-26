@@ -6,11 +6,10 @@ import "forge-std/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract TMarket {
-
   struct RightsDisposalOrder {
     address seller;
     address tokenAddress;
-    uint256 units; 
+    uint256 units;
     uint256 tradeValuePerUnit; // price in pennies per unit
     uint256 expirationDate;
   }
@@ -22,9 +21,7 @@ contract TMarket {
   // add counter
   uint256 public orderCount;
 
-
   uint256 shareCounter;
-
 
   constructor(address usdc_) {
     usdc = usdc_;
@@ -35,18 +32,18 @@ contract TMarket {
     uint256 units,
     uint256 tradeValuePerUnit,
     uint256 expirationDate
-  )  external {
-
+  ) external {
     orders.push(
       RightsDisposalOrder(
         msg.sender, tokenAddress, units, tradeValuePerUnit, expirationDate
       )
     );
     orderCount++;
-
   }
 
-  function getOrder(uint256 index) external view returns (RightsDisposalOrder memory) {
+  function getOrder(
+    uint256 index
+  ) external view returns (RightsDisposalOrder memory) {
     return orders[index];
   }
 
@@ -57,14 +54,19 @@ contract TMarket {
     uint256 price = order.tradeValuePerUnit * order.units;
     IERC20(usdc).transferFrom(msg.sender, order.seller, price);
 
-    CMTAT_PROXY(order.tokenAddress).transferFrom(order.seller, msg.sender, order.units);
+    CMTAT_PROXY(order.tokenAddress).transferFrom(
+      order.seller, msg.sender, order.units
+    );
     console.log(order.units);
   }
 
   // here we will conver the number of rights to offered shares
-  function redeemRightsForOfferedShares(address rightsTokenAddress, address offeredSharesAddress, uint256 units) external payable {
-    
-    (uint256 first, ) = CMTAT_PROXY(offeredSharesAddress).getRightsRatio();
+  function redeemRightsForOfferedShares(
+    address rightsTokenAddress,
+    address offeredSharesAddress,
+    uint256 units
+  ) external payable {
+    (uint256 first,) = CMTAT_PROXY(offeredSharesAddress).getRightsRatio();
     uint256 shares = units / first;
     // get the price of the offered shares
     uint256 price = CMTAT_PROXY(offeredSharesAddress).getPricePerShare();
@@ -76,7 +78,8 @@ contract TMarket {
     // now transfer the shares to the user
     CMTAT_PROXY(offeredSharesAddress).mint(msg.sender, shares);
     shareCounter = shareCounter + shares;
-    CMTAT_PROXY(rightsTokenAddress).burn(msg.sender, units, "redeem rights for offered shares");
-
+    CMTAT_PROXY(rightsTokenAddress).burn(
+      msg.sender, units, "redeem rights for offered shares"
+    );
   }
 }
